@@ -214,8 +214,8 @@ html, body {
 
 .frame__pied {
     display: grid;
-    justify-items: end;
-    gap: 4px;
+    justify-items: start;
+    gap: 6px;
 }
 
 .contrib {
