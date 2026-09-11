@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vu du ciel — la France au nadir</title>
+
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin="" />
+
+    <!-- MapLibre GL : fond de carte vectoriel OpenFreeMap de la carte de
+         réponse, greffé sur Leaflet via le plugin chargé plus bas. -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css"
+          integrity="sha384-MinO0mNliZ3vwppuPOUnGa+iq619pfMhLVUXfC4LHwSCvF9H+6P/KO4Q7qBOYV5V"
+          crossorigin="" />
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Le cliché occupe tout l'écran ; le reste flotte au-dessus. -->
+    <div id="viewer"></div>
+
+    <!-- Cadre de la photographie aérienne : marques fiduciaires et
+         métadonnées imprimées en bordure. Non cliquable. -->
+    <div class="frame">
+        <span class="fiducial fiducial--tl"></span>
+        <span class="fiducial fiducial--tr"></span>
+        <span class="fiducial fiducial--bl"></span>
+        <span class="fiducial fiducial--br"></span>
+
+        <div class="frame__row frame__row--top">
+            <p class="meta meta--title">
+                Vu du ciel
+                <span>La France au nadir</span>
+            </p>
+            <p class="reveal" id="reveal"></p>
+            <p class="meta" id="progress"></p>
+        </div>
+
+        <div class="frame__row frame__row--bottom">
+            <p class="meta" id="score"></p>
+            <div class="frame__pied">
+                <p class="contrib">
+                    <button type="button" class="contrib__lien" id="signaler">Signaler un problème</button>
+                    <span class="contrib__sep">·</span>
+                    <button type="button" class="contrib__lien" id="proposer">Proposer un lieu</button>
+                </p>
+                <p class="meta">BD ORTHO® — IGN-F — Licence ouverte 2.0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mode proposition : le joueur désigne un lieu sur la carte de
+         réponse, la partie est suspendue le temps de le faire. -->
+    <div class="proposition" id="proposition" hidden>
+        <p class="proposition__consigne" id="proposition-consigne"></p>
+        <div class="proposition__actions">
+            <button type="button" class="proposition__bouton" id="proposition-annuler">Annuler</button>
+            <button type="button" class="proposition__bouton proposition__bouton--valider"
+                    id="proposition-ouvrir" disabled>Rédiger la proposition</button>
+        </div>
+    </div>
+
+    <!-- Table lumineuse : la carte où le joueur porte sa réponse. -->
+    <section class="panel" id="panel">
+        <div id="answer"></div>
+        <div class="panel__foot">
+            <p id="result"></p>
+            <button id="validate">Valider</button>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+
+    <!-- MapLibre GL puis le plugin pont : ce dernier lit les globales L et
+         maplibregl posées par les deux scripts précédents, donc l'ordre de
+         ces trois balises compte. -->
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"
+            integrity="sha384-SYKAG6cglRMN0RVvhNeBY0r3FYKNOJtznwA0v7B5Vp9tr31xAHsZC0DqkQ/pZDmj"
+            crossorigin=""></script>
+    <script src="https://unpkg.com/@maplibre/maplibre-gl-leaflet@0.1.4/dist/leaflet-maplibre-gl.js"
+            integrity="sha384-tXYNKOHx4T02jMP7YYCtBxPIv1B5gaA5mcVPBzqMp6d7VzWzxJgI2aWF/nJLrQdS"
+            crossorigin=""></script>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
