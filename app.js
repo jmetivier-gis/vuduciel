@@ -192,6 +192,38 @@ function pickRounds(sites, count) {
     return shuffled.slice(0, Math.min(count, shuffled.length));
 }
 
+// En dessous de ce rayon, le score est plein : l'imprécision du clic (et
+// la taille du monument lui-même — la cité de Carcassonne ne se pointe pas
+// au mètre près) ne doit pas coûter de points.
+const RAYON_PLEIN_SCORE_KM = 15;
+
+// Décroissance au-delà du rayon. Volontairement plus dure qu'un GeoGuessr
+// classique en vue de rue : là-bas, reconnaître le pays ne dit pas où l'on
+// est, alors qu'ici reconnaître le monument revient presque à le localiser
+// exactement. Un écart franc, au-delà de la tolérance, trahit plutôt une
+// hésitation entre deux lieux — à sanctionner net, pas en douceur.
+const DECROISSANCE_KM = 100;
+
+/** Calcule le score d'une manche à partir de l'écart, en kilomètres. */
+function calculerScore(distanceKm) {
+    if (distanceKm <= RAYON_PLEIN_SCORE_KM) {
+        return 5000;
+    }
+
+    const ecartAuDela = distanceKm - RAYON_PLEIN_SCORE_KM;
+    return Math.round(5000 * Math.exp(-ecartAuDela / DECROISSANCE_KM));
+}
+
+/** Précharge l'imagette de la prochaine manche. */
+function precharger() {
+    const nextRound = rounds[currentRound + 1];
+    if (nextRound) {
+        const nextImage = new Image();
+        nextImage.src = nextRound.image;
+    }
+}
+
+
 // ---------------------------------------------------------------------------
 // Contributions
 // ---------------------------------------------------------------------------
@@ -325,6 +357,8 @@ function loadRound() {
     imageLayer.setUrl(round.image);
     trueLatLng = L.latLng(round.lat, round.lng);
 
+    precharger();
+
     // Sans ce nettoyage, le marqueur de la manche précédente resterait
     // affiché — et permettrait de valider sans avoir cliqué.
     if (marker) {
@@ -444,7 +478,7 @@ button.addEventListener('click', function () {
         answerMap.invalidateSize();
 
         const distanceKm = trueLatLng.distanceTo(marker.getLatLng()) / 1000;
-        const points = Math.round(5000 * Math.exp(-distanceKm / 250));
+        const points = calculerScore(distanceKm);
 
         totalScore += points;
         updateHud();

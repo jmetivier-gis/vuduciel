@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!--
+    Reprend le motif des marques fiduciaires du cadre de jeu (.fiducial
+    dans style.css) : quatre repères en L aux coins d'un cliché. Traits
+    volontairement épais (3px sur 32) et coins largement ouverts, pour
+    rester lisibles à la taille d'un favicon (16 px, voire moins en
+    onglet réduit) — le motif original, plus fin, disparaîtrait.
+  -->
+  <rect width="32" height="32" rx="4" fill="#14171a"/>
+  <g fill="none" stroke="#97a398" stroke-width="3" stroke-linecap="square">
+    <path d="M6 12 V6 H12"/>
+    <path d="M20 6 H26 V12"/>
+    <path d="M26 20 V26 H20"/>
+    <path d="M12 26 H6 V20"/>
+  </g>
+  <circle cx="16" cy="16" r="2.5" fill="#c8302b"/>
+</svg>
